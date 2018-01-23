@@ -1,0 +1,109 @@
+{
+  "id": "/activemq",
+  "connected": true,
+  "recovered": false,
+  "TASK_UNREACHABLE": 0,
+  "backoffFactor": 1.15,
+  "backoffSeconds": 1,
+  "cpus": 1,
+  "disk": 0,
+  "env": {
+    "ACTIVEMQ_ADMIN_LOGIN": "admin",
+    "ACTIVEMQ_ADMIN_PASSWORD": "admin",
+    "ACTIVEMQ_USER_LOGIN": "user",
+    "ACTIVEMQ_USER_PASSWORD": "user",
+    "ACTIVEMQ_ENABLED_AUTH": "false",
+    "ACTIVEMQ_ENABLED_SCHEDULER": "true",
+    "ACTIVEMQ_FRAME_SIZE": "104857600",
+    "ACTIVEMQ_IMAGE": "minyk/activemq:5.15.2",
+    "ACTIVEMQ_LOGLEVEL": "INFO",
+    "ACTIVEMQ_MAX_CONNECTION": "1000",
+    "ACTIVEMQ_MAX_MEMORY": "1024",
+    "ACTIVEMQ_MIN_MEMORY": "128",
+    "ACTIVEMQ_PENDING_MESSAGE_LIMIT": "1000",
+    "ACTIVEMQ_RLDB_SECURITY_TOKEN": "pass",
+    "ACTIVEMQ_STORAGE_USAGE": "100 gb",
+    "ACTIVEMQ_TEMP_USAGE": "50 gb",
+    "BOOTSTRAP_URI": "http://api.activemq.marathon.l4lb.thisdcos.directory/v1/files/bootstrap.zip",
+    "EXECUTOR_URI": "http://api.activemq.marathon.l4lb.thisdcos.directory/v1/files/executor.zip",
+    "JAVA_URI": "http://api.activemq.marathon.l4lb.thisdcos.directory/v1/files/jre-8u152-linux-x64.tar.gz",
+    "LIBMESOS_URI": "http://api.activemq.marathon.l4lb.thisdcos.directory/v1/files/libmesos-bundle-master-28f8827.tar.gz",
+    "FRAMEWORK_LOG_LEVEL": "INFO",
+    "FRAMEWORK_NAME": "activemq",
+    "FRAMEWORK_USER": "root",
+    "MESOS_API_VERSION": "V1",
+    "NODE_COUNT": "3",
+    "NODE_CPUS": "0.5",
+    "NODE_MEM": "252",
+    "NODE_PLACEMENT": "[[\"hostname\", \"UNIQUE\"]]",
+    "PACKAGE_BUILD_TIME_EPOCH_MS": "1516702222406",
+    "PACKAGE_BUILD_TIME_STR": "Tue Jan 23 2018 10:10:22 +0000",
+    "PACKAGE_NAME": "activemq",
+    "PACKAGE_VERSION": "stub-universe",
+    "SLEEP_DURATION": "1000",
+    "ENABLE_VIRTUAL_NETWORK": "yes",
+    "VIRTUAL_NETWORK_NAME": "dcos"
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 900,
+      "intervalSeconds": 30,
+      "maxConsecutiveFailures": 0,
+      "portIndex": 0,
+      "timeoutSeconds": 30,
+      "protocol": "MESOS_HTTP",
+      "path": "/v1/health"
+    }
+  ],
+  "instances": 1,
+  "labels": {
+    "DCOS_COMMONS_UNINSTALL": "true",
+    "DCOS_PACKAGE_OPTIONS": "e30=",
+    "DCOS_SERVICE_SCHEME": "http",
+    "DCOS_PACKAGE_SOURCE": "http://172.17.0.1:51233/stub-universe-activemq.json",
+    "DCOS_SERVICE_NAME": "activemq",
+    "DCOS_PACKAGE_FRAMEWORK_NAME": "activemq",
+    "DCOS_SERVICE_PORT_INDEX": "0",
+    "DCOS_PACKAGE_VERSION": "stub-universe",
+    "DCOS_COMMONS_API_VERSION": "v1",
+    "DCOS_PACKAGE_NAME": "activemq",
+    "MARATHON_SINGLE_INSTANCE_APP": "true"
+  },
+  "maxLaunchDelaySeconds": 3600,
+  "mem": 1024,
+  "gpus": 0,
+  "networks": [
+    {
+      "mode": "host"
+    }
+  ],
+  "portDefinitions": [
+    {
+      "labels": {
+        "VIP_0": "/api.activemq:80"
+      },
+      "name": "api",
+      "protocol": "tcp",
+      "port": 0
+    }
+  ],
+  "requirePorts": false,
+  "upgradeStrategy": {
+    "maximumOverCapacity": 0,
+    "minimumHealthCapacity": 0
+  },
+  "user": "root",
+  "killSelection": "YOUNGEST_FIRST",
+  "unreachableStrategy": {
+    "inactiveAfterSeconds": 0,
+    "expungeAfterSeconds": 0
+  },
+  "constraints": [],
+  "container": {
+    "type": "MESOS",
+    "docker": {
+      "image": "minyk/dcos-activemq:v0.1",
+      "forcePullImage": true
+    }
+  }
+}

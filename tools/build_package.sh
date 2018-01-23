@@ -78,9 +78,9 @@ echo "- Publish:   $publish_method"
 echo "---"
 
 # Verify airgap (except for hello world)
-if [ $FRAMEWORK_NAME != "hello-world" ]; then
-    ${TOOLS_DIR}/airgap_linter.py ${FRAMEWORK_DIR}
-fi
+#if [ $FRAMEWORK_NAME != "hello-world" ]; then
+#    ${TOOLS_DIR}/airgap_linter.py ${FRAMEWORK_DIR}
+#fi
 
 # Upload using requested method
 case "$publish_method" in

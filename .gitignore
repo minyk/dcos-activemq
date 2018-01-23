@@ -59,3 +59,7 @@ frameworks/*/*-universe-url*
 
 # OS X
 .DS_Store
+
+# docker
+frameworks/activemq/docker/*.zip
+frameworks/activemq/docker/*.tar.gz

@@ -1,0 +1,102 @@
+name: {{FRAMEWORK_NAME}}
+scheduler:
+  principal: {{FRAMEWORK_PRINCIPAL}}
+  user: {{FRAMEWORK_USER}}
+pods:
+  activemq:
+    uris:
+      - {{BOOTSTRAP_URI}}
+    count: {{NODE_COUNT}}
+    placement: '{{{NODE_PLACEMENT}}}'
+    {{#ENABLE_VIRTUAL_NETWORK}}
+    networks:
+      {{VIRTUAL_NETWORK_NAME}}:
+        labels: {{VIRTUAL_NETWORK_PLUGIN_LABELS}}
+    {{/ENABLE_VIRTUAL_NETWORK}}
+    image: {{ACTIVEMQ_IMAGE}}
+    tasks:
+      broker:
+        goal: RUNNING
+        cmd: "cd ${MESOS_SANDBOX} && ./bootstrap -print-env=true -resolve-hosts activemq-0-broker.${FRAMEWORK_HOST},activemq-1-broker.${FRAMEWORK_HOST},activemq-2-broker.${FRAMEWORK_HOST} && export ACTIVEMQ_NAME=${FRAMEWORK_NAME} && python /app/entrypoint/Init.py && /opt/activemq/bin/activemq console"
+        cpus: {{NODE_CPUS}}
+        memory: {{NODE_MEM}}
+        env:
+          ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: "true"
+          ACTIVEMQ_ADMIN_LOGIN: {{ACTIVEMQ_ADMIN_LOGIN}}
+          ACTIVEMQ_ADMIN_PASSWORD: {{ACTIVEMQ_ADMIN_PASSWORD}}
+          ACTIVEMQ_USER_LOGIN: {{ACTIVEMQ_USER_LOGIN}}
+          ACTIVEMQ_USER_PASSWORD: {{ACTIVEMQ_USER_PASSWORD}}
+          # For later use:
+          #ACTIVEMQ_OWNER_LOGIN: {{ACTIVEMQ_OWNER_LOGIN}}
+          #ACTIVEMQ_OWNER_PASSWORD: {{ACTIVEMQ_OWNER_PASSWORD}}
+          #ACTIVEMQ_WRITE_LOGIN: {{ACTIVEMQ_WRITE_LOGIN}}
+          #ACTIVEMQ_WRITE_PASSWORD: {{ACTIVEMQ_WRITE_PASSWORD}}
+          #ACTIVEMQ_READ_LOGIN: {{ACTIVEMQ_READ_LOGIN}}
+          #ACTIVEMQ_READ_PASSWORD: {{ACTIVEMQ_READ_PASSWORD}}
+          #ACTIVEMQ_JMX_LOGIN: {{ACTIVEMQ_JMX_LOGIN}}
+          #ACTIVEMQ_JMX_PASSWORD: {{ACTIVEMQ_JMX_PASSWORD}}
+          ACTIVEMQ_LOGLEVEL: {{ACTIVEMQ_LOGLEVEL}}
+
+          # ACTIVEMQ_NAME will be dynamically set in cmd
+          ACTIVEMQ_PENDING_MESSAGE_LIMIT: {{ACTIVEMQ_PENDING_MESSAGE_LIMIT}}
+          ACTIVEMQ_STORAGE_USAGE: {{ACTIVEMQ_STORAGE_USAGE}}
+          ACTIVEMQ_TEMP_USAGE: {{ACTIVEMQ_TEMP_USAGE}}
+          ACTIVEMQ_MAX_CONNECTION: {{ACTIVEMQ_MAX_CONNECTION}}
+          ACTIVEMQ_FRAME_SIZE: {{ACTIVEMQ_FRAME_SIZE}}
+          ACTIVEMQ_STATIC_TOPICS: {{ACTIVEMQ_STATIC_TOPICS}}
+          ACTIVEMQ_STATIC_QUEUES: {{ACTIVEMQ_STATIC_QUEUES}}
+          ACTIVEMQ_ENABLED_SCHEDULER: {{ACTIVEMQ_ENABLED_SCHEDULER}}
+          ACTIVEMQ_ENABLED_AUTH: {{ACTIVEMQ_ENABLED_AUTH}}
+          ACTIVEMQ_MIN_MEMORY: {{ACTIVEMQ_MIN_MEMORY}}
+          ACTIVEMQ_MAX_MEMORY: {{ACTIVEMQ_MAX_MEMORY}}
+
+          #Replicated LevelDB
+          ACTIVEMQ_RLDB_SECURITY_TOKEN: {{ACTIVEMQ_RLDB_SECURITY_TOKEN}}
+          ACTIVEMQ_RLDB_ZKADDR: {{ACTIVEMQ_RLDB_ZKADDR}}
+          ACTIVEMQ_RLDB_ZKPASSWORD: {{ACTIVEMQ_RLDB_ZKPASSWORD}}
+          ACTIVEMQ_RLDB_ZKPATH: {{ACTIVEMQ_RLDB_ZKPATH}}
+        configs:
+          activemq:
+            template: broker.xml
+            dest: /opt/activemq/conf/activemq.xml
+          log4j:
+            template: log4j.properties
+            dest: /opt/activemq/conf/log4j.properties
+        ports:
+          openwire:
+            port: 61616
+            advertise: true
+            vip:
+              port: 61616
+          amqp:
+            port: 5672
+            advertise: true
+            vip:
+              port: 5672
+          stomp:
+            port: 61613
+            advertise: true
+            vip:
+              port: 61613
+          mqtt:
+            port: 1883
+            advertise: true
+            vip:
+              port: 1883
+          web:
+            port: 8161
+            vip:
+              port: 8161
+plans:
+  deploy:
+    strategy: serial
+    phases:
+      node-deploy:
+        strategy: serial
+        pod: activemq
+  replace:
+    strategy: serial
+    phases:
+      node-deploy:
+        strategy: serial
+        pod: activemq

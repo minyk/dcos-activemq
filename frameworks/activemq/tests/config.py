@@ -1,0 +1,4 @@
+PACKAGE_NAME = 'activemq'
+SERVICE_NAME = 'activemq'
+DEFAULT_TASK_COUNT = 1
+

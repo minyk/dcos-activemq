@@ -1,4 +1,4 @@
-rootProject.name = 'dcos-commons'
+rootProject.name = 'dcos-activemq'
 
 include 'sdk/common'
 project(":sdk/common").name = "common"
@@ -32,3 +32,6 @@ project(":frameworks/cassandra").name = "cassandra"
 
 include 'frameworks/helloworld/tests/tls/keystore'
 project(":frameworks/helloworld/tests/tls/keystore").name = 'keystore-app'
+
+include 'frameworks/activemq'
+project(":frameworks/activemq").name = "activemq"
